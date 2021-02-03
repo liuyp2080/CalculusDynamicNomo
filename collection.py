@@ -12,7 +12,7 @@ st.write(title,unsafe_allow_html=True)
 # image=Image.open('test.jpg')
 # st.image(image,caption='test', use_column_width=True)
 st.write('### ')
-st.info('Welcome! 这里是一个临床科研相关知识的网站，希望您能有所收获! ')
+st.info('Welcome! 这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的各个方面，希望能让您有所收获! ')
 
 select=st.selectbox('请选择感兴趣的板块',['临床研究标准化','临床研究设计（观点）','临床预测模型（实践）'])
 
@@ -29,8 +29,8 @@ if select=='临床研究标准化':
          '临床试验中所要收集的三大类变量（预测变量、混杂变量和结局变量）之一，其标准化有助于各个临床试验之间进行相互地比较，也为后续的Meta\n'
          '分析奠定基础,规范结局变量的收集，避免变量收集过多或者收集不全的情况。')
     st.subheader("一、核心结局指标集")
-    st.write("**简介**：在从事临床研究过程中的可以体会到，自己领域的系列研究以及同行的研究在收集结局变量方面往往有相似性。这是结局变量标准化的基础：\n"
-         "同领域内的研究往往有相同的结局变量，而相同的结局变量也很可能会有相同的混杂变量。某些结局变量收集不齐全会直接导致试验结论不全面，与\n"
+    st.write("**简介**：在从事临床研究过程中的可以体会到，自己领域的系列研究以及同行的研究在收集结局变量方面往往有相似性，这是结局变量标准化的基础：\n"
+         "同领域内的研究往往有相同的结局变量。某些结局变量收集不齐全会直接导致试验结论不全面，\n"
          "与同行的研究不可比(结局指标不同)。在这样的背景下，临床试验核心指标集（COS）应运而生，COS是某特定病证相关的所有临床研究都应测量\n"
          "和报告的、最少但最重要的指标集合，是由国际学术组织有效性试验核心结局指标测量（[COMET](www.comet-initiative.org/)）成立并提出倡议。\n"
          "该网站上建立了COS数据库，可以查询下载目前已经建立的各个研究领域的COS。需要指出的是，许多小的研究领域并没有现成的COS，需要自己进行创建，\n"
@@ -57,97 +57,17 @@ if select=='临床研究标准化':
     st.write('--The End-- ')
 elif select=='临床预测模型（实践）':
     st.write('临床预测模型的开发属于“医学检验研究设计”大类，其目标在于应用数学方法开发新的（复合的）检验从而改善临床决策，并非评价已有的检验。\n'
+             '预测模型研究利用临床资料或实验室检查或两者结合来进行研究,制作出来的模型可用于辅助临床决策是贴近临床的一种\n'
+             '科研形式，并且对实验技能要求不高，医生不需要用额外的时间做实验，不需要关注临床研究以外的科研资料，所以也是适合医生开展的科研形式。\n'
              '一个合格的临床研究预测模型，应该具备以下特点：1、研究对象应该与应用该规则的人群类似；2、应用了合适的数学方法构建模型，可选的方法包括\n'
-             '逻辑回归、Cox风险比例模型、机器学习和深度学习；3、进行了充份的验证。医学数据往往是由标签的，属于“监督性学习”的范畴，Excel表格是存储数据的最常见形式。\n'
-             '结合医学数据的一些特点我们在实践中也总结了一些经验，1、模型可操作性要强，体现在预测变量的数量不宜过多，有的研究宁可牺牲一些的预测准确度也要减少预测变量的数量；\n'
-             '2、尝试用多种数学方法进行模型的构建或者采用集成或综合的方法来构建模型，特别是根据构建原理迥异的模型，比如决策树、神经网络、逻辑回归；\n'
-             '然后从中选择较优的模型；3、样本量不宜过少，临床上的样本量通常不大，需要采用交叉验证\n'
-             '或采用集成算法等数学方法进行一定程度的克服；4、对原始数据进行合适的处理等。下面以python语言编码粗略展示目前流行的非线性模型神经网络模型的构建流程。')
-    st.write('* 数据处理')
-    st.code('''
-import pandas as pd
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from keras.utils.np_utils import to_categorical #分类变量one-hot编码
-from tensorflow.keras.utils import normalize #连续变量标准化数据
-
-iris=load_iris()
-X_train, X_test, y_train, y_test=train_test_split(iris.data, iris.target, test_size = 0.2, random_state=0)
-y_test=to_categorical(y_test)
-y_train=to_categorical(y_train)
-X_train=normalize(X_train)
-X_test=normalize(X_test)
-''')
-    st.write('* 模型构建（带超参数调节）')
-    st.code('''
-import numpy as np
-import pandas as pd
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from keras.utils.np_utils import to_categorical #深度学习神经网络库
-
-# nn structure
-from keras.backend import clear_session
-from keras.layers import Dense, Dropout
-from keras.models import Sequential
-from keras.optimizers import RMSprop
-from keras.callbacks import ModelCheckpoint
-from keras.callbacks import EarlyStopping
-import optuna #超参数调节
-
-def objective(trial):
-    clear_session()
-    # built 1 layer neural network
-    model = Sequential()
-    model.add(
-        Dense(
-            units=trial.suggest_categorical('units', [32, 64, 128]),
-            activation=trial.suggest_categorical('activation', ['relu', 'linear']),
-            input_shape=(X_train.shape[1],)))
-    model.add(Dropout(rate=trial.suggest_uniform('drop_rate',0.0,1.0)))
-    model.add(Dense(3, activation='softmax'))
-    # We compile our model with a sampled learning rate.
-    lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
-    model.compile(
-        loss="binary_crossentropy", optimizer=RMSprop(lr=lr), metrics=["accuracy"]
-    )
-    callback_lists = [EarlyStopping(monitor="accuracy", patience=1),
-                      ModelCheckpoint(filepath="my_model.h5", moniter="val_loss", save_best_only=True)]
-
-    model.fit(
-        X_train,
-        y_train,
-        validation_data=(X_test, y_test),
-        shuffle=True,
-        batch_size=trial.suggest_int('batch_size',1,50),
-        epochs=500,
-        verbose=False,
-        callbacks=callback_lists
-    )
-
-    # Evaluate the model accuracy on the validation set.
-    score = model.evaluate(X_test, y_test, verbose=0)
-    return score[1]
-
-
-if __name__ == "__main__":
-    study = optuna.create_study(direction="maximize")
-    study.optimize(objective, n_trials=100, timeout=600)
-
-    print("Number of finished trials: {}".format(len(study.trials)))
-
-    print("Best trial:")
-    trial = study.best_trial
-
-    print("  Value: {}".format(trial.value))
-    print("  Params: ")
-
-    for key, value in trial.params.items():
-        print("    {}: {}".format(key, value))
-''')
-    st.write('* 模型评价')
+             '逻辑回归、Cox风险比例模型、机器学习和深度学习；3、进行了充份的验证。')
+    st.write('结合医学数据的一些特点，我们在具体操作上也总结了一些经验:')
+    st.write('* 模型可操作性要强，体现在预测变量的数量不宜过多，有的研究宁可牺牲一些的预测准确度也要减少预测变量的数量。')
+    st.write('* 尝试用多种数学方法进行模型的构建或者采用集成或综合的方法来构建模型，特别是根据构建原理迥异的模型，比如决策树、神经网络、逻辑回归，然后从中选择较优的模型。')
+    st.write('* 样本量不宜过少，临床上的样本量通常不大，需要采用交叉验证或采用集成算法等数学方法进行一定程度的克服。')
+    st.write('* 模型构建过程中重视对原始数据的处理和模型超参数的调节等。')
     st.write('### --Collection--')
-    st.write('[临床预测模型资料]()')
+    st.write('[临床预测模型资料](https://pan.baidu.com/s/1jYvvYIPBvKs8JwGVXszKeA)（提取码-lcyj）')
     st.write('*----------------------------------------------------------------------------------------------------------------*')
     st.write('--The End-- ')
 else:
@@ -185,23 +105,8 @@ else:
     st.write('教授后来点评，虽然是出于同一个题目，两种设计的关注点不同，人群不同，分析方法不同，但是都符合两个人的背景知识，同样具有可行性。临床试验目前\n'
              '已经形成一定的规范和套路，一个临床医生不论什么学历，都可以学会临床试验的做法，获得这项必备的职业技能。另外，每个人背景不同，关注点不同，\n'
              '不是所有临床试验的方法都要去了解。希望各位在职的学生克服畏难的想法，积极掌握临床试验的规范。')
-    st.write('### 三、论文呈现数据，图还是表？   ——绝对值数据用表，相对值数据用图')
-    st.write('最近投稿的一篇文章，编辑部建议把行为学的图改成表格，到底是为什么呢？咱也不是科研新人，用图表示行为学的数据在多个杂志上也发表了文章数篇，\n'
-             '比这家杂志水平高的也有。有心挣扎一下，但是另一句箴言浮现在心头“一切按照审稿人的意见!”，鉴于“是图还是表”也不是大是大非的问题，\n'
-             '就遵照编辑部的意思将图改成了表，后来算是一切顺利。')
-    st.write('那残留的那个问题，呈现数据，是图还是表？有没有标准答案呢。网络上广传的一个答案是，\n'
-             '“根据数据或表达观点的需要选择最合适的表达形式。表格的优点是可以方便地列举大量精确数据或资料, 图形则可以直观、有效地表达复杂数据。因此,\n'
-             ' 如果强调展示给读者精确的数值,就采用表格形式；如果要强调展示数据的分布特征或变化趋势, 则宜采用图示方法。”网上能广为流传，说明大家都接受这个\n'
-             '答案。具体到我的问题是图还是表看来都可以，取决于偏好和目的：作者（我）是想直观地表达，所以用图，而编辑是想提供给读者精确的数据，所以用表。\n'
-             '但是这里我还想提供一个我自己想出来的标准给大家参考。医学临床文章多采用表格，偏向于提供精确的数据，有时候整篇文章没有一个图；而医学基础研究多\n'
-             '采用图，偏向于直观表述数据，有时候整篇文章没有一个表格。这是约定俗成，还是另有原因？')
-    st.write('个人认为临床文章的数据多是绝对值，比如身高、体重或各种实验室\n'
-             '检查数据等，其用表格提供这些绝对值的精确数据的最可能原因是为了后续的再分析，尤其是系统性综述中的meta分析，如果是提供图的话，meta分析的数据就无从摘录。\n'
-             '反观基础研究除了个别的数据是绝对值数据（行为学数据或ELISA数据），多数数据是相对值数据，比如Western Blot的统计数据、免疫组化的半定量数据，\n'
-             '且一般没有后续meta分析的步骤，所以一般是用图展示给读者形象的数据和趋势。然而，近年来，动物实验也开始提倡进行系统性综述，以便得出综合性的结论，\n'
-             '医学基础试验用表格提供精确的数据也有了一定的必要性。所以，这里个人在原有的图表选择标准的基础上，附带提出一个想法，就是“绝对值数据用表，\n'
-             '相对值数据用图”，供大家讨论。当大家在撰写一些临床与基础相结合的文章时候，这个标准或许能解决一些人在图表选择方面的困难。')
+
     st.write('### --Collection--')
-    st.write('[临床研究设计学习资料]()')
+    st.write('[临床研究设计学习资料](https://pan.baidu.com/s/1F59Xg2X-0srdPSeKfNYtKQ)（提取码：lcyj）')
     st.write('*----------------------------------------------------------------------------------------------------------------*')
     st.write('--The End-- ')
