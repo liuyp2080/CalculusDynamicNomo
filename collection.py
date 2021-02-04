@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 
-st.set_page_config('Clinical Research Collection',page_icon='random')
+st.set_page_config('中心实验室临床研究工作站',page_icon='random')
 st.balloons()
 # st.sidebar.checkbox('标准化')
 # st.sidebar.checkbox('预测模型')
