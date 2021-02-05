@@ -21,7 +21,7 @@ st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和�
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
 select1=col1.checkbox('临床研究标准化')
-select2=col2.checkbox('生物信息学')
+select2=col2.checkbox('临床预测模型')
 select3=col3.checkbox('临床研究设计')
 select4=col4.checkbox('合作与服务',value=True)
 if select1:
@@ -66,7 +66,7 @@ if select1:
     st.write('--The End-- ')
 if select2:
 
-    st.write('### 临床预测模型')
+    # st.write('### 临床预测模型')
     st.write('临床预测模型的开发属于“医学检验研究设计”大类，其目标在于应用数学方法开发新的（复合的）检验从而改善临床决策，并非评价已有的检验。\n'
              '预测模型研究利用临床资料或实验室检查或两者结合来进行研究,制作出来的模型可用于辅助临床决策是贴近临床的一种\n'
              '科研形式，并且对实验技能要求不高，医生不需要用额外的时间做实验，不需要关注临床研究以外的科研资料，所以也是适合医生开展的科研形式。\n'
@@ -80,7 +80,7 @@ if select2:
     st.write('### --Collection--')
     st.write('[临床预测模型资料](https://pan.baidu.com/s/1jYvvYIPBvKs8JwGVXszKeA)（提取码-lcyj）')
     st.info('资料内容包括临床预测模型相关文献、中文指南')
-    st.write('### 生物信息学分析')
+    # st.write('### 生物信息学分析')
     st.write('*----------------------------------------------------------------------------------------------------------------*')
     st.write('--The End-- ')
 if select3:
