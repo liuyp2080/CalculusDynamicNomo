@@ -2,19 +2,19 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 
-st.set_page_config('中心实验室临床研究工作站',page_icon='random')
+st.set_page_config('临床研究Station',page_icon='random')
 st.balloons()
 # st.sidebar.checkbox('标准化')
 # st.sidebar.checkbox('预测模型')
 # st.sidebar.checkbox('观点')
 title='''<div style="background-color:tomato;padding:10px">
-<h2 style="color:white;text-align:center;">中心实验室临床研究工作站</h2>
+<h2 style="color:white;text-align:center;">临床研究Station</h2>
 </div>'''
 st.write(title, unsafe_allow_html=True)
 # image=Image.open('test.jpg')
 # st.image(image,caption='test', use_column_width=True)
 st.write('### ')
-st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! ————中心实验室生物统计学组')
+st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! ————临床研究Station')
 
 # select=st.selectbox('请选择感兴趣的板块',['临床研究标准化','临床研究设计（观点）','临床预测模型（实践）'])
 
@@ -84,7 +84,6 @@ if select2:
     st.write('*----------------------------------------------------------------------------------------------------------------*')
     st.write('--The End-- ')
 if select3:
-
     st.write('### 一、不是所有的统计方法都需要了解')
     st.write('临床研究技能已经被列为一个临床医师的核心职业技能之一，从纷繁复杂的影响疾病因素中找出规律是医学进步的途径也是临床医生无可替代的责任。\n'
              '对于想从事临床研究的医生来说，当然是了解临床研究的知识愈多愈好，但是繁多而复杂的临床研究的知识常常使临床医生无从下手，甚至望而却步。')
@@ -139,15 +138,15 @@ if select3:
     st.write('--The End-- ')
 if select4:
     st.subheader("团队介绍")
-    st.write('徐州市中心医院中心实验室于2020年成立“生物医学统计学组”，致力于为中心医院临床和职能科室提供医学数据库建设、流行病学试验设计、论文统计学\n'
+    st.write('团队致力于提供医学数据库建设、流行病学试验设计、论文统计学\n'
              '方法分析、临床样本收集、生物信息学分析、数据分析、数据可视化等七类医学相关的方法学支持。“学组”成员来源于临床医学专业、\n'
              '统计学专业、生物信息学专业和生物学专业，并在各自领域有多年的研究经验，为开展相关研究和服务奠定了坚实的基础。')
     # st.write('欢迎徐州和淮海地区的从事临床相关研究的学生和老师咨询！')
-    st.info('学组主要成员介绍:')
-    team_df=pd.DataFrame({'姓名':['李 睿','刘岳鹏','王秀力','刘学奎','吕 茜','李 阳'],
-                          '专业':['临床医学','神经生物学','生物学','统计学','分子生物学','生物信息学'],
-                          '专修方向':['细胞行为研究','临床预测模型','临床组织样本利用和管理','临床研究设计和数据统计','基因和蛋白检测','基因数据分析']
-                          },index=[1,2,3,4,5,6])
+    # st.info('学组主要成员介绍:')
+    # team_df=pd.DataFrame({'姓名':['李 睿','刘岳鹏','王秀力','刘学奎','吕 茜','李 阳'],
+    #                       '专业':['临床医学','神经生物学','人体解剖与组织胚胎学','统计学','分子生物学','生物信息学'],
+    #                       '专修方向':['细胞行为研究','临床预测模型','临床组织样本利用和管理','临床研究设计和数据统计','基因和蛋白检测','基因数据分析']
+    #                       },index=[1,2,3,4,5,6])
     st.table(team_df)
     st.subheader("合作服务内容:")
     st.write('* **生物医学统计方法咨询：**回答统计过程中可以采用的技巧和方法。')
@@ -159,6 +158,6 @@ if select4:
     st.write('* **临床数据库建设：**为临床科室或个人建立临床数据库进行软件和数据库设计方面的指导。')
     st.write('* **组织样本收集指导：**为如何收集和利用临床样本提供经验指导。')
     st.subheader('联系方式:')
-    st.write('咨询微信群:email:：中心实验室生物医学统计咨询')
-    st.write('咨询电话:telephone:：0516-85790153')
+    st.write('咨询微信群:email:：临床研究Station')
+    st.write('咨询电话:telephone:：15351633096')
 
