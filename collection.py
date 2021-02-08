@@ -22,9 +22,9 @@ st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和�
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
 select1=col1.checkbox('临床研究标准化')
-select2=col2.checkbox('临床预测模型')
+select2=col2.checkbox('临床预测模型',value=True)
 select3=col3.checkbox('临床研究设计')
-select4=col4.checkbox('合作与服务',value=True)
+select4=col4.checkbox('合作与服务')
 if select1:
     st.write('随着临床研究这个领域的不断发展和成熟，在前人的不断探索下，形成了许多经验，这些经验经过专家群体或者专业机构的总结、扩展成为\n'
         '业内人士普遍接受的行为准则，这里称为“标准化”。虽说在临床研究领域并没有强制要求一定要按照标准化的流程来进行, 然而尽可能地学习并\n'
