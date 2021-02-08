@@ -1,9 +1,10 @@
-import streamlit as st
-import pandas as pd
-from PIL import Image
 
+import streamlit as st
+from PIL import Image
+import numpy as np
 st.set_page_config('临床研究Station',page_icon='random')
 st.balloons()
+
 # st.sidebar.checkbox('标准化')
 # st.sidebar.checkbox('预测模型')
 # st.sidebar.checkbox('观点')
@@ -77,11 +78,37 @@ if select2:
     st.write('* 尝试用多种数学方法进行模型的构建或者采用集成或综合的方法来构建模型，特别是根据构建原理迥异的模型，比如决策树、神经网络、逻辑回归，然后从中选择较优的模型。')
     st.write('* 样本量不宜过少，临床上的样本量通常不大，需要采用交叉验证或采用集成算法等数学方法进行一定程度的克服。')
     st.write('* 模型构建过程中重视对原始数据的处理和模型超参数的调节等。')
+
     st.write('### --Collection--')
     st.write('[临床预测模型资料](https://pan.baidu.com/s/1jYvvYIPBvKs8JwGVXszKeA)（提取码-lcyj）')
     st.info('资料内容包括临床预测模型相关文献、中文指南')
     # st.write('### 生物信息学分析')
-    st.write('*----------------------------------------------------------------------------------------------------------------*')
+    st.write(
+        '*----------------------------------------------------------------------------------------------------------------*')
+    
+    st.subheader('甲状腺微小瘤转移概率预测计算器')
+    thyroid_nomo = Image.open('thyriod_nom.png')
+    st.image(thyroid_nomo, width=450)
+    st.info('参考文献:杨瑞,张守鹏,黄韬,明洁,杨鹏,朱俊玲,瞿芳.cN0期甲状腺微小乳头状癌淋巴结转移模型的构建和验证\n'
+            '以及手术方式探讨[J].临床耳鼻咽喉头颈外科杂志,2021,35(02):137-140.说明:根据文献介绍，该研究纳入病例670例，预测概率值的阈值为0.55时,中央组淋巴结转移\n'
+            '预测的准确率为68.5%。')
+    para_size = st.sidebar.slider('肿瘤直径', min_value=1.0, max_value=10.0, step=0.1)
+    col1, col2, col3 = st.beta_columns(3)
+    col1.write('您选择的肿瘤直径是：{}mm'.format(para_size))
+    age_select = st.sidebar.radio('性别', ['女', '男'], )
+    col2.write('您选择的性别是：{}性'.format(age_select))
+    if age_select == '女':
+        para_sex = 0
+    else:
+        para_sex = 1
+    para_age = st.sidebar.slider('患者年龄', 10, 75)
+    col3.write('您选择的患者年龄是：{}岁'.format(para_age))
+    z = 0.2357 * para_size + 0.9196 * para_sex - 0.0527 * para_age + 0.0665
+    q = 1 + np.exp(-z)
+    prob = 1 / q
+    # if st.button('计算'):
+    st.success(r'该患者甲状腺微小肿瘤的发生淋巴结转移概率为{:.2f}%:'.format(prob * 100))
+
     st.write('--The End-- ')
 if select3:
     st.write('### 一、不是所有的统计方法都需要了解')
