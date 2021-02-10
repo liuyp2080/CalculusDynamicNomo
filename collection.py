@@ -17,7 +17,6 @@ st.write(title, unsafe_allow_html=True)
 st.write('### ')
 st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! ————临床研究Station')
 
-# select=st.selectbox('请选择感兴趣的板块',['临床研究标准化','临床研究设计（观点）','临床预测模型（实践）'])
 
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
@@ -85,13 +84,24 @@ if select2:
     # st.write('### 生物信息学分析')
     st.write(
         '*----------------------------------------------------------------------------------------------------------------*')
-    
-    st.subheader('甲状腺微小瘤转移概率预测计算器')
+
+    import streamlit as st
+    from PIL import Image
+    import numpy as np
+
+
+    def toweight(ls_hr):
+        list_weight = list(map(np.log, ls_hr))
+        return list_weight
+
+
+    st.header('1、甲状腺微小瘤转移概率预测计算器')
     thyroid_nomo = Image.open('thyriod_nom.png')
-    st.image(thyroid_nomo, width=450)
+    st.image(thyroid_nomo, width=400)
     st.info('参考文献:杨瑞,张守鹏,黄韬,明洁,杨鹏,朱俊玲,瞿芳.cN0期甲状腺微小乳头状癌淋巴结转移模型的构建和验证\n'
             '以及手术方式探讨[J].临床耳鼻咽喉头颈外科杂志,2021,35(02):137-140.说明:根据文献介绍，该研究纳入病例670例，预测概率值的阈值为0.55时,中央组淋巴结转移\n'
             '预测的准确率为68.5%。')
+    st.sidebar.subheader('1')
     para_size = st.sidebar.slider('肿瘤直径', min_value=1.0, max_value=10.0, step=0.1)
     col1, col2, col3 = st.beta_columns(3)
     col1.write('您选择的肿瘤直径是：{}mm'.format(para_size))
@@ -103,11 +113,118 @@ if select2:
         para_sex = 1
     para_age = st.sidebar.slider('患者年龄', 10, 75)
     col3.write('您选择的患者年龄是：{}岁'.format(para_age))
-    z = 0.2357 * para_size + 0.9196 * para_sex - 0.0527 * para_age + 0.0665
+
+    list_para = [para_size, para_sex, para_age]
+    list_or = [1.26579, 2.50828, 0.94866]
+    betaZero = 0.0665
+    # formula logic regression
+    list_weight = toweight(list_or)
+    multiply_list = [a * b for a, b in zip(list_weight, list_para)]
+    z = sum(multiply_list) + betaZero
     q = 1 + np.exp(-z)
     prob = 1 / q
-    # if st.button('计算'):
+
     st.success(r'该患者甲状腺微小肿瘤的发生淋巴结转移概率为{:.2f}%:'.format(prob * 100))
+
+    st.header('2、四肢骨肉瘤生存率预测计算器')
+    bone_tumor = Image.open('bone_tumor.jpg')
+    st.image(bone_tumor, width=400)
+    st.info('参考文献：来源于柳昌全,赵广雷,陈康明,王思群,魏亦兵,黄钢勇,陈杰,石晶晟,夏军,陈飞雁.基于SEER数据库的四肢骨肉瘤预后相关列线图的\n'
+            '构建[J].中国骨与关节杂志,2020,9(08):563-571.说明：所有四肢骨肉瘤患者的数据来源于SEER 数据库 (1995年至2014年)；\n'
+            '组织学类型是骨肉瘤 ( 9180-普通型骨肉瘤，9181-软骨母细胞性骨肉瘤，9182-纤维母细胞性骨肉瘤，9183-血管扩张性骨肉瘤，9184-paget’s 骨肉瘤，9185-小细胞骨肉瘤，9186-中心性骨肉\n'
+            '瘤，9187-骨内高分化骨肉瘤，9192-骨旁骨肉瘤，9193-骨膜骨肉瘤，9194-高等级骨表面骨肉瘤。')
+    st.sidebar.subheader('2')
+    age_select = st.sidebar.radio('患者年龄分层', ['<21', '21~46', '>=46'])
+    if age_select == '<21':
+        para_age_1 = 0
+        para_age_2 = 0
+    elif age_select == '21~46':
+        para_age_1 = 1
+        para_age_2 = 0
+    else:
+        para_age_1 = 0
+        para_age_2 = 1
+    col1, col2, col3, col4, col5 = st.beta_columns(5)
+    col1.write('您所选择的年龄是:{}'.format(age_select))
+    period_select = st.sidebar.radio('肿瘤分期', ['局部性', '区域性', '远处转移'])
+    if period_select == '局部性':
+        para_period_1 = 0
+        para_period_2 = 0
+    elif period_select == '区域性':
+        para_period_1 = 1
+        para_period_2 = 0
+    else:
+        para_period_1 = 0
+        para_period_2 = 1
+    col2.write('您所选择的肿瘤分期是:{}'.format(period_select))
+    operation = st.sidebar.radio('手术与否', ['是', '否'])
+    if operation == '是':
+        para_operation = 0
+    else:
+        para_operation = 1
+    col3.write('您所选择的手术情况是:{}'.format(operation))
+    size = st.sidebar.radio('肿瘤尺寸', ['<13.9', '>=13.9'])
+    if size == "<13.9":
+        para_size = 0
+    else:
+        para_size = 1
+    col4.write('您所选择的肿瘤尺寸是:{}'.format(size))
+    type = st.sidebar.selectbox('病理类型', ['9192', '9182', '9186', '9183', '9180', '9181'])
+    if type == '9192':
+        para_type_1 = 0
+        para_type_2 = 0
+        para_type_3 = 0
+        para_type_4 = 0
+        para_type_5 = 0
+    elif type == '9181':
+        para_type_1 = 1
+        para_type_2 = 0
+        para_type_3 = 0
+        para_type_4 = 0
+        para_type_5 = 0
+    elif type == '9180':
+        para_type_1 = 0
+        para_type_2 = 1
+        para_type_3 = 0
+        para_type_4 = 0
+        para_type_5 = 0
+    elif type == '9183':
+        para_type_1 = 0
+        para_type_2 = 0
+        para_type_3 = 1
+        para_type_4 = 0
+        para_type_5 = 0
+    elif type == '9186':
+        para_type_1 = 0
+        para_type_2 = 0
+        para_type_3 = 0
+        para_type_4 = 1
+        para_type_5 = 0
+    else:
+        para_type_1 = 0
+        para_type_2 = 0
+        para_type_3 = 0
+        para_type_4 = 0
+        para_type_5 = 1
+    col5.write('您所选择的肿瘤病理类型是:{}'.format(type))
+
+    def toweight(ls):
+        list_weight = list(map(np.log, ls))
+        return list_weight
+
+    # output
+    basic_rate_adopt_1 = 0.9883522937528895
+    basic_rate_adopt_3 = 0.9409661226740611
+    basic_rate_adopt_5 = 0.9175902823690558
+    hr = [1.63, 3.88, 1.31, 3.50, 2.10, 1.40, 2.635, 2.464, 2.151, 1.719, 1.161]
+    list_para = [para_age_1, para_age_2, para_period_1, para_period_2, para_operation, para_size, para_type_1,
+                 para_type_2, para_type_3, para_type_4, para_type_5]
+    list_weight = toweight(hr)
+    var = [a * b for a, b in zip(list_weight, list_para)]
+    survival_rate_1year = basic_rate_adopt_1 ** np.exp(sum(var))
+    survival_rate_3year = basic_rate_adopt_3 ** np.exp(sum(var))
+    survival_rate_5year = basic_rate_adopt_5 ** np.exp(sum(var))
+    st.success('该患者的1年生存率为{:.2f}%，3年生存率为{:.2f}%，5年生存率为{:.2f}%。'.format(survival_rate_1year * 100, survival_rate_3year * 100,survival_rate_5year * 100))
 
     st.write('--The End-- ')
 if select3:
@@ -185,6 +302,6 @@ if select4:
     st.write('* **临床数据库建设：**为临床科室或个人建立临床数据库进行软件和数据库设计方面的指导。')
     st.write('* **组织样本收集指导：**为如何收集和利用临床样本提供经验指导。')
     st.subheader('联系方式:')
-    st.write('咨询微信群:email:：临床研究Station')
-    st.write('咨询电话:telephone:：15351633096')
+    # st.write('咨询微信群:email:：临床研究Station')
+    # st.write('咨询电话:telephone:：15351633096')
 
