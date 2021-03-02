@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 
 import streamlit as st
 from PIL import Image
@@ -180,15 +181,55 @@ if select4:
     prob = 1 / q
 
     st.success(r'该患者甲状腺微小肿瘤的发生淋巴结转移概率为{:.2f}%:'.format(prob * 100))
+#___________________________________________________________________________________
+    st.header('2、甲状腺术后低钙风险预测计算器')
+    thyroid_hypocalcemia = Image.open('hypocalcemia.png')
+    st.image(thyroid_hypocalcemia, width=400)
+    st.info('参考文献:李岚,刘畅,肖明.预测甲状腺术后发生低钙血症的风险列线图模型建立[J].重庆医学,2021,50(03):461-465.说明:根据文献介绍，该研究纳入病例670例，预测概率值的阈值为0.55时,中央组淋巴结转移\n'
+            )
+    st.sidebar.subheader('2')
+    malignant_select = st.sidebar.radio('恶性肿瘤', ['否', '是'], )
+    col1, col2, col3,col4,col5,col6,col7 = st.beta_columns(6)
+    col1.write('恶性肿瘤为：{}'.format(malignant_select))
+    bilateral_select = st.sidebar.radio('双侧病变', ['否', '是'], )
+    col2.write('双侧病变为：{}'.format(bilateral_select))
+    central_node_select = st.sidebar.radio('清扫中央组淋巴结', ['否', '是'], )
+    col3.write('清扫中央组淋巴结为：{}'.format(central_node_select))
+    posterior_capsule_select = st.sidebar.radio('甲状腺后被膜破坏', ['否', '是'], )
+    col4.write('甲状腺后被膜破坏为：{}'.format(posterior_capsule_select))
+    operation_time_select = st.sidebar.radio('手术时间超过100分钟', ['否', '是'], )
+    col5.write('手术时间超过100分钟为：{}'.format(operation_time_select))
+    parathyroidectomy_select = st.sidebar.radio('甲状旁腺切除', ['否', '是'], )
+    col6.write('甲状旁腺切除为：{}'.format(operation_time_select))
 
-    st.header('2、四肢骨肉瘤生存率预测计算器')
+    list_para=[]
+    for i in [malignant_select,bilateral_select,central_node_select,posterior_capsule_select,operation_time_select,parathyroidectomy_select]:
+        if i == '否':
+            para = 0
+        else:
+            para = 1
+        list_para = list_para.append(para)
+
+    list_or = [2.546,3.204,2.582,3.508,3.658,2.553]
+    betaZero = -4.668
+    # formula logic regression
+    list_weight = toweight(list_or)
+    multiply_list = [a * b for a, b in zip(list_weight, list_para)]
+    z = sum(multiply_list) + betaZero
+    q = 1 + np.exp(-z)
+    prob = 1 / q
+
+    st.success(r'该患者甲状腺术后发生低钙血症概率为{:.2f}%:'.format(prob * 100))
+
+#____________________________________________________________________________________
+    st.header('3、四肢骨肉瘤生存率预测计算器')
     bone_tumor = Image.open('bone_tumor.jpg')
     st.image(bone_tumor, width=400)
     st.info('参考文献：来源于柳昌全,赵广雷,陈康明,王思群,魏亦兵,黄钢勇,陈杰,石晶晟,夏军,陈飞雁.基于SEER数据库的四肢骨肉瘤预后相关列线图的\n'
             '构建[J].中国骨与关节杂志,2020,9(08):563-571.说明：所有四肢骨肉瘤患者的数据来源于SEER 数据库 (1995年至2014年)；\n'
             '组织学类型是骨肉瘤 ( 9180-普通型骨肉瘤，9181-软骨母细胞性骨肉瘤，9182-纤维母细胞性骨肉瘤，9183-血管扩张性骨肉瘤，9184-paget’s 骨肉瘤，9185-小细胞骨肉瘤，9186-中心性骨肉\n'
             '瘤，9187-骨内高分化骨肉瘤，9192-骨旁骨肉瘤，9193-骨膜骨肉瘤，9194-高等级骨表面骨肉瘤。')
-    st.sidebar.subheader('2')
+    st.sidebar.subheader('3')
     age_select = st.sidebar.radio('患者年龄分层', ['<21', '21~46', '>=46'])
     if age_select == '<21':
         para_age_1 = 0
