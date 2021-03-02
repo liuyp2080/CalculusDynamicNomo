@@ -157,7 +157,7 @@ if select4:
     st.info('参考文献:杨瑞,张守鹏,黄韬,明洁,杨鹏,朱俊玲,瞿芳.cN0期甲状腺微小乳头状癌淋巴结转移模型的构建和验证\n'
             '以及手术方式探讨[J].临床耳鼻咽喉头颈外科杂志,2021,35(02):137-140.说明:根据文献介绍，该研究纳入病例670例，预测概率值的阈值为0.55时,中央组淋巴结转移\n'
             '预测的准确率为68.5%。')
-    st.sidebar.subheader('1')
+    st.sidebar.subheader('1、甲状腺微小瘤转移概率预测')
     para_size = st.sidebar.slider('肿瘤直径', min_value=1.0, max_value=10.0, step=0.1)
     col1, col2, col3 = st.beta_columns(3)
     col1.write('您选择的肿瘤直径是：{}mm'.format(para_size))
@@ -187,7 +187,7 @@ if select4:
     st.image(thyroid_hypocalcemia, width=400)
     st.info('参考文献:李岚,刘畅,肖明.预测甲状腺术后发生低钙血症的风险列线图模型建立[J].重庆医学,2021,50(03):461-465.说明:'
             )
-    st.sidebar.subheader('2_________________')
+    st.sidebar.subheader('2、甲状腺术后低钙风险预测')
     malignant_select = st.sidebar.radio('恶性肿瘤', ['否', '是'], )
     col1, col2, col3,col4,col5,col6 = st.beta_columns(6)
     col1.write('恶性肿瘤为：{}'.format(malignant_select))
@@ -222,14 +222,53 @@ if select4:
     st.success(r'该患者甲状腺术后发生低钙血症概率为{:.2f}%:'.format(prob * 100))
 
 #____________________________________________________________________________________
-    st.header('3、四肢骨肉瘤生存率预测计算器')
+    st.header('2、甲状腺癌患者术后出血风险预测计算器')
+    thyroid_bloody = Image.open('bloody.png')
+    st.image(thyroid_bloody, width=400)
+    st.info('参考文献:郑艳,张茜,孙菲.个人化预测甲状腺癌患者术后出血风险的列线图模型的建立[J].医学综述,2021,27(03):609-613.说明:'
+            )
+    st.sidebar.subheader('2、甲状腺癌患者术后出血风险预测')
+    hypertension_select = st.sidebar.radio('合并高血压', ['否', '是'], )
+    col1, col2, col3,col4,col5,col6 = st.beta_columns(6)
+    col1.write('合并高血压为：{}'.format(malignant_select))
+    fullcut_select = st.sidebar.radio('甲状腺全切', ['否', '是'], )
+    col2.write('甲状腺全切为：{}'.format(bilateral_select))
+    tumor_stage_select = st.sidebar.radio('肿瘤分期达III期', ['否', '是'], )
+    col3.write('肿瘤分期达III期为：{}'.format(central_node_select))
+    tumor_size_select = st.sidebar.radio('肿瘤尺寸达4cm', ['否', '是'], )
+    col4.write('肿瘤尺寸达4cm为：{}'.format(posterior_capsule_select))
+    nerve_invasion_select = st.sidebar.radio('喉返神经浸润', ['否', '是'], )
+    col5.write('喉返神经浸润为：{}'.format(operation_time_select))
+    node_metastasis_select = st.sidebar.radio('淋巴结转移', ['否', '是'], )
+    col6.write('淋巴结转移为：{}'.format(node_metastasis_select))
+
+    paras=[]
+    for i in [hypertension_select,fullcut_select,tumor_stage_select,tumor_size_select,nerve_invasion_select,node_metastasis_select]:
+        if i == '否':
+            para = 0
+        else:
+            para = 1
+        paras.append(para)
+    list_para=paras
+    list_or = [12.33,6.12,4.137,5.118,16.477,5.296]
+    betaZero = -5.256
+    # formula logic regression
+    list_weight = toweight(list_or)
+    multiply_list = [a * b for a, b in zip(list_weight, list_para)]
+    z = sum(multiply_list) + betaZero
+    q = 1 + np.exp(-z)
+    prob = 1 / q
+
+    st.success(r'该患者甲状腺术后出血的风险为{:.2f}%:'.format(prob * 100))
+ #___________________________________________________________________________
+    st.header('4、四肢骨肉瘤生存率预测计算器')
     bone_tumor = Image.open('bone_tumor.jpg')
     st.image(bone_tumor, width=400)
     st.info('参考文献：来源于柳昌全,赵广雷,陈康明,王思群,魏亦兵,黄钢勇,陈杰,石晶晟,夏军,陈飞雁.基于SEER数据库的四肢骨肉瘤预后相关列线图的\n'
             '构建[J].中国骨与关节杂志,2020,9(08):563-571.说明：所有四肢骨肉瘤患者的数据来源于SEER 数据库 (1995年至2014年)；\n'
             '组织学类型是骨肉瘤 ( 9180-普通型骨肉瘤，9181-软骨母细胞性骨肉瘤，9182-纤维母细胞性骨肉瘤，9183-血管扩张性骨肉瘤，9184-paget’s 骨肉瘤，9185-小细胞骨肉瘤，9186-中心性骨肉\n'
             '瘤，9187-骨内高分化骨肉瘤，9192-骨旁骨肉瘤，9193-骨膜骨肉瘤，9194-高等级骨表面骨肉瘤。')
-    st.sidebar.subheader('3')
+    st.sidebar.subheader('4、四肢骨肉瘤生存率预测')
     age_select = st.sidebar.radio('患者年龄分层', ['<21', '21~46', '>=46'])
     if age_select == '<21':
         para_age_1 = 0
