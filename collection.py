@@ -208,8 +208,8 @@ if select4:
             para = 0
         else:
             para = 1
-        list_para = paras.append(para)
-
+        paras.append(para)
+    list_para=paras
     list_or = [2.546,3.204,2.582,3.508,3.658,2.553]
     betaZero = -4.668
     # formula logic regression
