@@ -187,7 +187,7 @@ if select4:
     st.image(thyroid_hypocalcemia, width=400)
     st.info('参考文献:李岚,刘畅,肖明.预测甲状腺术后发生低钙血症的风险列线图模型建立[J].重庆医学,2021,50(03):461-465.说明:'
             )
-    st.sidebar.subheader('2')
+    st.sidebar.subheader('2_________________')
     malignant_select = st.sidebar.radio('恶性肿瘤', ['否', '是'], )
     col1, col2, col3,col4,col5,col6 = st.beta_columns(6)
     col1.write('恶性肿瘤为：{}'.format(malignant_select))
@@ -200,7 +200,7 @@ if select4:
     operation_time_select = st.sidebar.radio('手术时间超过100分钟', ['否', '是'], )
     col5.write('手术时间超过100分钟为：{}'.format(operation_time_select))
     parathyroidectomy_select = st.sidebar.radio('甲状旁腺切除', ['否', '是'], )
-    col6.write('甲状旁腺切除为：{}'.format(operation_time_select))
+    col6.write('甲状旁腺切除为：{}'.format(parathyroidectomy_select))
 
     paras=[]
     for i in [malignant_select,bilateral_select,central_node_select,posterior_capsule_select,operation_time_select,parathyroidectomy_select]:
