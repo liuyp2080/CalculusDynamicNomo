@@ -189,7 +189,7 @@ if select4:
             )
     st.sidebar.subheader('2')
     malignant_select = st.sidebar.radio('恶性肿瘤', ['否', '是'], )
-    col1, col2, col3,col4,col5,col6,col7 = st.beta_columns(6)
+    col1, col2, col3,col4,col5,col6 = st.beta_columns(6)
     col1.write('恶性肿瘤为：{}'.format(malignant_select))
     bilateral_select = st.sidebar.radio('双侧病变', ['否', '是'], )
     col2.write('双侧病变为：{}'.format(bilateral_select))
