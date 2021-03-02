@@ -202,13 +202,13 @@ if select4:
     parathyroidectomy_select = st.sidebar.radio('甲状旁腺切除', ['否', '是'], )
     col6.write('甲状旁腺切除为：{}'.format(operation_time_select))
 
-    list_para=[]
+    paras=[]
     for i in [malignant_select,bilateral_select,central_node_select,posterior_capsule_select,operation_time_select,parathyroidectomy_select]:
         if i == '否':
             para = 0
         else:
             para = 1
-        list_para = list_para.append(para)
+        list_para = paras.append(para)
 
     list_or = [2.546,3.204,2.582,3.508,3.658,2.553]
     betaZero = -4.668
