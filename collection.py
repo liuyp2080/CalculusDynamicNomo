@@ -2,29 +2,27 @@
 
 import streamlit as st
 from PIL import Image
-import numpy as np
 st.set_page_config('临床研究Station',page_icon='random')
-st.balloons()
 
-# st.sidebar.checkbox('标准化')
-# st.sidebar.checkbox('预测模型')
-# st.sidebar.checkbox('观点')
 title='''<div style="background-color:tomato;padding:10px">
 <h2 style="color:white;text-align:center;">临床研究Station</h2>
 </div>'''
 st.write(title, unsafe_allow_html=True)
-# image=Image.open('test.jpg')
-# st.image(image,caption='test', use_column_width=True)
-st.write('### ')
-st.info('Welcome:heart:!      这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! ————临床研究Station')
 
+st.write('### ')
+st.info('Welcome:heart:! 这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! 动态列线图是参照已经发表的相关研究制作而成，预测结果与研究一致，不定期添加新的动态列线图，欢迎提供意见和建议或者定制手机APP版动态列线图，请发送邮件:liuyp2080@163.com  ————临床研究Station')
 
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
+col5,col6,col7,col8=st.beta_columns(4)
 select1=col1.checkbox('临床研究标准化')
 select2=col2.checkbox('临床预测模型')
 select3=col3.checkbox('临床研究设计')
-select4=col4.checkbox('动态列线图',value=True)
+select4=col4.checkbox('动态列线图-外科',value=True)
+select5=col5.checkbox('动态列线图-内科')
+select6=col6.checkbox('动态列线图-妇科')
+select7=col7.checkbox('动态列线图-儿科')
+select8=col8.checkbox('动态列线图-重症')
 if select1:
     st.write('随着临床研究这个领域的不断发展和成熟，在前人的不断探索下，形成了许多经验，这些经验经过专家群体或者专业机构的总结、扩展成为\n'
         '业内人士普遍接受的行为准则，这里称为“标准化”。虽说在临床研究领域并没有强制要求一定要按照标准化的流程来进行, 然而尽可能地学习并\n'
@@ -150,7 +148,6 @@ if select4:
         list_weight = list(map(np.log, ls_hr))
         return list_weight
 
-
     st.header('1、甲状腺微小瘤转移概率预测计算器')
     thyroid_nomo = Image.open('thyriod_nom.png')
     st.image(thyroid_nomo, width=400)
@@ -182,14 +179,84 @@ if select4:
 
     st.success(r'该患者甲状腺微小肿瘤的发生淋巴结转移概率为{:.2f}%:'.format(prob * 100))
 #___________________________________________________________________________________
-    st.header('2、甲状腺术后低钙风险预测计算器')
+    st.header('2、甲状腺癌侧颈部淋巴节转移概率计算器')
+    thyroid_llnm = Image.open('thyroid_llnm_nomo.png')
+    st.image(thyroid_llnm, width=400)
+    st.info('参考文献:周瑾,周世崇,李佳伟,王宇,陈雅玲,王芬,智文祥,陈敏,常才.单发甲状腺乳头状癌侧颈部淋巴结转移的相关因素分析[J].中华超声影像学杂志,2019(11):971-972-973-974-975.说明:'
+            )
+    st.sidebar.subheader('2、甲状腺癌侧颈部淋巴节转移概率预测')
+    col1, col2, col3, col4 = st.beta_columns(4)
+    CLNM_select = st.sidebar.radio('中央淋巴结转移', ['无', '有'], )
+    col1.write('中央淋巴结转移为：{}'.format(CLNM_select))
+    if CLNM_select == '无':
+        CLNM = 0
+    else:
+        CLNM = 1
+    size_select = st.sidebar.radio('病灶最大直径为', ['≤10mm', '<10mm且≤20mm','>20mm'], )
+    col2.write('病灶最大直径为：{}'.format(size_select))
+    if size_select =='≤10mm':
+        size_15=0
+        size_20=0
+    elif size_select=='<10mm且≤20mm':
+        size_15 = 1
+        size_20 = 0
+    else:
+        size_15 = 0
+        size_20 = 1
+    pos_select = st.sidebar.radio('位置', ['峡部', '上部','中部','下部','多部位'], )
+    col3.write('位置为：{}'.format(pos_select))
+    if pos_select =='峡部':
+        pos_up=0
+        pos_middle=0
+        pos_down=0
+        pos_all=0
+    elif pos_select=='上部':
+        pos_up = 1
+        pos_middle = 0
+        pos_down = 0
+        pos_all = 0
+    elif pos_select=='中部':
+        pos_up = 0
+        pos_middle = 1
+        pos_down = 0
+        pos_all = 0
+    elif pos_select=='下部':
+        pos_up = 0
+        pos_middle = 0
+        pos_down = 1
+        pos_all = 0
+    else:
+        pos_up = 0
+        pos_middle = 0
+        pos_down = 0
+        pos_all = 1
+    microcalcification_select = st.sidebar.radio('微钙化', ['否', '是'], )
+    col4.write('微钙化为：{}'.format(microcalcification_select))
+    if microcalcification_select == '否':
+        microcali= 0
+    else:
+        microcali = 1
+    list_para = [CLNM,size_15,size_20,pos_up,pos_middle,pos_down,pos_all,microcali]
+    list_or = [14.871,2.071,2.262,9.784,5.595,3.001,23.345,1.548]
+    betaZero =-6.31342
+    # formula logic regression
+    list_weight = toweight(list_or)
+    multiply_list = [a * b for a, b in zip(list_weight, list_para)]
+    z = sum(multiply_list) + betaZero
+    q = 1 + np.exp(-z)
+    prob = 1 / q
+
+    st.success(r'该患者侧颈部淋巴结转移的概率为{:.2f}%:'.format(prob * 100))
+
+    # __________________________________________________________________________
+    st.header('3、甲状腺术后低钙风险预测计算器')
     thyroid_hypocalcemia = Image.open('hypocalcemia.png')
     st.image(thyroid_hypocalcemia, width=400)
     st.info('参考文献:李岚,刘畅,肖明.预测甲状腺术后发生低钙血症的风险列线图模型建立[J].重庆医学,2021,50(03):461-465.说明:'
             )
-    st.sidebar.subheader('2、甲状腺术后低钙风险预测')
+    st.sidebar.subheader('3、甲状腺术后低钙风险预测')
     malignant_select = st.sidebar.radio('恶性肿瘤', ['否', '是'], )
-    col1, col2, col3,col4,col5,col6 = st.beta_columns(6)
+    col1, col2, col3, col4, col5, col6 = st.beta_columns(6)
     col1.write('恶性肿瘤为：{}'.format(malignant_select))
     bilateral_select = st.sidebar.radio('双侧病变', ['否', '是'], )
     col2.write('双侧病变为：{}'.format(bilateral_select))
@@ -202,15 +269,16 @@ if select4:
     parathyroidectomy_select = st.sidebar.radio('甲状旁腺切除', ['否', '是'], )
     col6.write('甲状旁腺切除为：{}'.format(parathyroidectomy_select))
 
-    paras=[]
-    for i in [malignant_select,bilateral_select,central_node_select,posterior_capsule_select,operation_time_select,parathyroidectomy_select]:
+    paras = []
+    for i in [malignant_select, bilateral_select, central_node_select, posterior_capsule_select, operation_time_select,
+              parathyroidectomy_select]:
         if i == '否':
             para = 0
         else:
             para = 1
         paras.append(para)
-    list_para=paras
-    list_or = [2.546,3.204,2.582,3.508,3.658,2.553]
+    list_para = paras
+    list_or = [2.546, 3.204, 2.582, 3.508, 3.658, 2.553]
     betaZero = -4.668
     # formula logic regression
     list_weight = toweight(list_or)
@@ -261,6 +329,9 @@ if select4:
 
     st.success(r'该患者甲状腺术后出血的风险为{:.2f}%:'.format(prob * 100))
  #___________________________________________________________________________
+
+
+    #________________________________________________________________________
     st.header('4、四肢骨肉瘤生存率预测计算器')
     bone_tumor = Image.open('bone_tumor.jpg')
     st.image(bone_tumor, width=400)
@@ -383,4 +454,11 @@ if select4:
     # st.subheader('联系方式:')
     # st.write('咨询微信群:email:：临床研究Station')
     # st.write('咨询电话:telephone:：15351633096')
-
+if select5:
+    st.write('建设中,敬请期待')
+if select6:
+    st.write('建设中,敬请期待')
+if select7:
+    st.write('建设中,敬请期待')
+if select8:
+    st.write('建设中,敬请期待')
