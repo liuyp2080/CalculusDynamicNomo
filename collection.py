@@ -5,12 +5,12 @@ from PIL import Image
 st.set_page_config('临床研究Station',page_icon='random')
 
 title='''<div style="background-color:tomato;padding:10px">
-<h2 style="color:white;text-align:center;">临床研究Station</h2>
+<h2 style="color:white;text-align:center;">动态临床预测模型</h2>
 </div>'''
 st.write(title, unsafe_allow_html=True)
 
 st.write('### ')
-st.info('Welcome:heart:! 这里是一个关于临床科研相关知识和思考的网站，涵盖临床研究的多个方面，希望能让您有所收获! 动态列线图是参照已经发表的相关研究制作而成，预测结果与研究一致，不定期添加新的动态列线图，欢迎提供意见和建议或者定制手机APP版动态列线图，请发送邮件:liuyp2080@163.com  ————临床研究Station')
+st.info('Welcome:heart:! 这里是一个关于发布动态临床预测模型的网站，希望能让您有所收获! 目前的主要工作是将已经发表的列线图转化为动态列线图，不定期添加，欢迎大家浏览使用，后期会制作动态列线图的手机APP版本,敬请期待!和制作团队联系请发送邮件:liuyp2080@163.com。')
 
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
@@ -459,6 +459,45 @@ if select5:
 if select6:
     st.write('建设中,敬请期待')
 if select7:
-    st.write('建设中,敬请期待')
+    import streamlit as st
+    from PIL import Image
+    import numpy as np
+
+
+    def toweight(ls_hr):
+        list_weight = list(map(np.log, ls_hr))
+        return list_weight
+
+
+    st.header('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
+    thyroid_nomo = Image.open('')
+    st.image(thyroid_nomo, width=400)
+    st.info('参考文献:Cheng S, Lin J, Zheng X, Yan L, Zhang Y, Zeng Q, Tian D, Fu Z, Dai J. Development and validation of a simple-to-use nomogram for predicting refractory Mycoplasma pneumoniae pneumonia in children. Pediatr Pulmonol. 2020 Apr;55(4):968-974. doi: 10.1002/ppul.24684. Epub 2020 Feb 10. PMID: 32040888.')
+    st.sidebar.subheader('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
+    para_LDH = st.sidebar.slider('Lactate Dehydrogenase', min_value=0, max_value=1600, step=100)
+    col1, col2, col3,col4 = st.beta_columns(4)
+    col1.write('Lactate Dehydrogenase：{}U/L'.format(para_LDH))
+    para_albumin = st.sidebar.slider('Albumin', min_value=10, max_value=55, step=1)
+    col2.write('Albumin：{}g/L'.format(para_albumin))
+    para_neutrophil= st.sidebar.slider('Neutrophil Ratio', min_value=0.2, max_value=0.9, step=0.1)
+    col3.write('Neutrophil Ratio：{}'.format(para_neutrophil))
+    highfever_select = st.sidebar.radio('High Fever', ['否', '是'], )
+    col4.write('High fever：{}'.format(highfever_select))
+    if  highfever_select == '否':
+        para_highfever = 0
+    else:
+        para_highfever = 1
+
+    list_para = [para_LDH,para_albumin, para_neutrophil, para_highfever]
+    list_or = [1.004,0.87,1160,5.54]
+    betaZero = -3.5
+    # formula logic regression
+    list_weight = toweight(list_or)
+    multiply_list = [a * b for a, b in zip(list_weight, list_para)]
+    z = sum(multiply_list) + betaZero
+    q = 1 + np.exp(-z)
+    prob = 1 / q
+
+    st.success(r'该患者患Mycoplasma pneumoniae肺炎概率为{:.2f}%:'.format(prob * 100))
 if select8:
     st.write('建设中,敬请期待')
