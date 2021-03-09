@@ -470,7 +470,7 @@ if select7:
 
 
     st.header('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
-    thyroid_nomo = Image.open('')
+    thyroid_nomo = Image.open('mycoplasma_pneumoniae.png')
     st.image(thyroid_nomo, width=400)
     st.info('参考文献:Cheng S, Lin J, Zheng X, Yan L, Zhang Y, Zeng Q, Tian D, Fu Z, Dai J. Development and validation of a simple-to-use nomogram for predicting refractory Mycoplasma pneumoniae pneumonia in children. Pediatr Pulmonol. 2020 Apr;55(4):968-974. doi: 10.1002/ppul.24684. Epub 2020 Feb 10. PMID: 32040888.')
     st.sidebar.subheader('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
@@ -481,9 +481,9 @@ if select7:
     col2.write('Albumin：{}g/L'.format(para_albumin))
     para_neutrophil= st.sidebar.slider('Neutrophil Ratio', min_value=0.2, max_value=0.9, step=0.1)
     col3.write('Neutrophil Ratio：{}'.format(para_neutrophil))
-    highfever_select = st.sidebar.radio('High Fever', ['否', '是'], )
+    highfever_select = st.sidebar.radio('High Fever', ['No', 'Yes'], )
     col4.write('High fever：{}'.format(highfever_select))
-    if  highfever_select == '否':
+    if  highfever_select == 'No':
         para_highfever = 0
     else:
         para_highfever = 1
