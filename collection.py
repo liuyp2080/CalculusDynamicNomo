@@ -5,18 +5,18 @@ from PIL import Image
 st.set_page_config('动态列线图',page_icon='random')
 
 title='''<div style="background-color:tomato;padding:10px">
-<h2 style="color:white;text-align:center;">动态临床预测模型</h2>
+<h2 style="color:white;text-align:center;">演算动态列线图</h2>
 </div>'''
 st.write(title, unsafe_allow_html=True)
 
 st.write('### ')
-st.info('Welcome:heart:! 这里是一个关于发布动态临床预测模型的网站，希望能让您有所收获! 目前的主要工作是将已经发表的列线图转化为动态列线图，不定期添加，欢迎大家浏览使用，后期会制作动态列线图的手机APP版本,敬请期待!和制作团队联系请发送邮件:liuyp2080@163.com。')
+st.info('Welcome:heart:! 这里是一个关于发布演算动态列线图的网站，所有的列线图是根据论文公布的公式或者数据经过演算制作而成,与传统的动态列线图的制作方式有区别,预测准确度上与论文公布列线图没有区别,但形式上更灵活,使用更简便，后期会制作动态列线图的手机APP版本，敬请期待!联系请发送邮件:liuyp2080@163.com。')
 
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
 col5,col6,col7,col8=st.beta_columns(4)
-select1=col1.checkbox('动态列线图-外科')
-select2=col2.checkbox('动态列线图-内科')
+select1=col1.checkbox('动态列线图-成人肿瘤')
+select2=col2.checkbox('动态列线图-慢性疾病')
 select3=col3.checkbox('动态列线图-妇科')
 select4=col4.checkbox('动态列线图-儿科',value=True)
 select5=col5.checkbox('动态列线图-重症')
@@ -25,7 +25,6 @@ if select1:
     import streamlit as st
     from PIL import Image
     import numpy as np
-
 
     def toweight(ls_hr):
         list_weight = list(map(np.log, ls_hr))
@@ -330,7 +329,7 @@ if select4:
     st.header('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
     thyroid_nomo = Image.open('mycoplasma_pneumoniae.png')
     st.image(thyroid_nomo, width=400)
-    st.info('参考文献:Cheng S, Lin J, Zheng X, Yan L, Zhang Y, Zeng Q, Tian D, Fu Z, Dai J. Development and validation of a simple-to-use nomogram for predicting refractory Mycoplasma pneumoniae pneumonia in children. Pediatr Pulmonol. 2020 Apr;55(4):968-974. doi: 10.1002/ppul.24684. Epub 2020 Feb 10. PMID: 32040888.说明:用论文公布OR制作而成(与公式相比有一个值有出入(Albumin计算为-0.139,而公式中为-0.135)),文中列线图认为制作不恰当.')
+    st.info('参考文献:Cheng S, Lin J, Zheng X, Yan L, Zhang Y, Zeng Q, Tian D, Fu Z, Dai J. Development and validation of a simple-to-use nomogram for predicting refractory Mycoplasma pneumoniae pneumonia in children. Pediatr Pulmonol. 2020 Apr;55(4):968-974. doi: 10.1002/ppul.24684. Epub 2020 Feb 10. PMID: 32040888.说明:用论文公布OR制作而成(与公式相比有一个值有出入(Albumin计算为-0.139,而公式中为-0.135))。')
     st.sidebar.subheader('1、Refractory Mycoplasma Pneumoniae Pneumonia in Children')
     para_LDH = st.sidebar.slider('Lactate Dehydrogenase', min_value=0, max_value=1600, step=10)
     col1, col2, col3,col4 = st.beta_columns(4)
@@ -356,6 +355,58 @@ if select4:
     q = 1 + np.exp(-z)
     prob = 1 / q
 
-    st.success(r'该患者患Mycoplasma pneumoniae肺炎概率为{:.2f}%:'.format(prob * 100))
+    st.success(r'结果：该患者患Mycoplasma pneumoniae肺炎概率为{:.2f}%:'.format(prob * 100))
+    # __________________
+    st.header('2、Survival in Children Newly Diagnosed with High-risk Neuroblastoma')
+    bone_tumor = Image.open('high_risk_neuroblastoma.png')
+    st.image(bone_tumor, width=400)
+    st.info('参考文献：Moreno L, Guo D, Irwin MS, Berthold F, Hogarty M, Kamijo T, Morgenstern D, Pasqualini C, Ash S, Potschger U, Ladenstein R, Valteau-Couanet D, Cohn SL, Pearson ADJ, London WB. A nomogram of clinical and biologic factors to predict survival in children newly diagnosed with high-risk neuroblastoma: An International Neuroblastoma Risk Group project. Pediatr Blood Cancer. 2021 Mar;68(3):e28794. doi: 10.1002/pbc.28794. Epub 2020 Nov 18. PMID: 33205902.')
+    st.sidebar.subheader('2、Survival in Children Newly Diagnosed with High-risk Neuroblastoma')
+    mycn_select = st.sidebar.radio('MYCN Status', ['NotAmp', 'Unknown', 'Amp'])
+    if mycn_select == 'NotAmp':
+        para_mycn_1 = 0
+        para_mycn_2 = 0
+    elif mycn_select == 'Unknown':
+        para_mycn_1 = 1
+        para_mycn_2 = 0
+    else:
+        para_mycn_1 = 0
+        para_mycn_2 = 1
+    col1, col2, col3 = st.beta_columns(3)
+    col1.write('MYCN Status:{}'.format(mycn_select))
+    para_ldh=st.sidebar.slider("LDH(U/L)",min_value=0,max_value=24000,step=100)
+    col2.write("LDH:{}U/L".format(para_ldh))
+
+    bone_metastasis_select = st.sidebar.radio('Bone Marrow Metastasis', ['Absence', 'Unknown', 'Presence'])
+    if bone_metastasis_select == 'Absence':
+        para_bone_metastasis_1 = 0
+        para_bone_metastasis_2 = 0
+    elif bone_metastasis_select == 'Uknown':
+        para_bone_metastasis_1 = 1
+        para_bone_metastasis_2 = 0
+    else:
+        para_bone_metastasis_1 = 0
+        para_bone_metastasis_2 = 1
+    col3.write('Bone Merrow metastasis:{}'.format(bone_metastasis_select))
+
+    def toweight(ls):
+        list_weight = list(map(np.log, ls))
+        return list_weight
+
+
+    # output
+
+    basic_rate_adopt_3 = 0.73710233
+
+    hr = [1.2,1.5,1.00005,1.7,2.1]
+    list_para = [para_mycn_1,para_mycn_2,para_ldh,para_bone_metastasis_1,para_bone_metastasis_2]
+    list_weight = toweight(hr)
+    var = [a * b for a, b in zip(list_weight, list_para)]
+    survival_rate_3year = basic_rate_adopt_3 ** np.exp(sum(var))
+
+    st.success(
+        '该患者的3年生存率为{:.2f}%'.format(survival_rate_3year * 100))
+
+    # ___________________
 if select5:
     st.write('建设中,敬请期待')
