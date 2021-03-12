@@ -2,7 +2,7 @@
 
 import streamlit as st
 from PIL import Image
-st.set_page_config('动态列线图',page_icon='random')
+st.set_page_config('演算动态列线图',page_icon='random')
 
 title='''<div style="background-color:tomato;padding:10px">
 <h2 style="color:white;text-align:center;">演算动态列线图</h2>
@@ -10,7 +10,7 @@ title='''<div style="background-color:tomato;padding:10px">
 st.write(title, unsafe_allow_html=True)
 
 st.write('### ')
-st.info('Welcome:heart:! 这里是一个关于发布演算动态列线图的网站，所有的列线图是根据论文公布的公式或者数据经过演算制作而成,与传统的动态列线图的制作方式有区别,预测准确度上与论文公布列线图没有区别,但形式上更灵活,使用更简便，后期会制作动态列线图的手机APP版本，敬请期待!联系请发送邮件:liuyp2080@163.com。')
+st.info('Welcome:heart:! 在医学研究领域,有许多的列线图不断被制作出来,发布在pubmed、知网等数据库中，期望为临床决策提供经验指导，但是由于种种原因，这些研究成果并没有被人认识和利用，静态列线图使用不便是其中原因之一，为此我们通过论文发表的数据推导公式而制作出动态的列线图，为了区别通过数据获得的传统动态列线图，我称之为“演算动态列线图”。这里是一个关于发布演算动态列线图的网站，所有的列线图是根据论文公布的公式或者数据经过演算制作而成,与传统的动态列线图的制作方式有区别,预测准确度上与论文公布列线图没有区别,但形式上更灵活,使用更简便，后期会制作动态列线图的手机APP版本，敬请期待!联系方式:liuyp2080@163.com。')
 
 st.write('请选择感兴趣的板块:')
 col1,col2,col3,col4=st.beta_columns(4)
