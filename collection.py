@@ -5,10 +5,11 @@ from PIL import Image
 import evassistant as ev
 import numpy as np
 st.set_page_config('医学动态列线图',page_icon='random')
-
+ad='''<head><script data-ad-client="ca-pub-5764613744340591" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script></head>'''
 title='''<div style="background-color:tomato;padding:10px">
 <h2 style="color:white;text-align:center;">医学动态列线图</h2>
 </div>'''
+st.write(ad,unsafe_allow_html=True)
 st.write(title, unsafe_allow_html=True)
 st.write("###")
 st.info('Welcome:heart:! 在医学研究领域，有许多的列线图不断被制作出来，发布在pubmed、知网等数据库中，期望为临床决策提供经验指导，但是只有经过了“外部验证”并且适合应用的模型才是可以用于临床的。静态列线图使用不便也限制了预测模型在临床的推广。这里收集并发布经过外部验证的预测模型病制作为动态列线图（网页计算器），希望优秀的预测模型能更多地在实际中进行应用。联系方式：liuyp2080@163.com。')
